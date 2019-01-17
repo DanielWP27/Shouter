@@ -2,10 +2,10 @@
 <html>
 <body>
 
-<form action="{% url 'new_post' %}" method ="post">
+<form action="{% url 'submit_post' %}" method ="post">
 {% csrf_token %}
-New Shout:<br>
-<input type="text" name="MAX 30 WORDS!" style="width: 300px;height: 200px;"><br>
+NEW SHOUT!:<br>
+<textarea name="shout_input" rows="4" cols="50" placeholder="MAX 30 WORDS"></textarea><br>
 <input type="submit" value = "SHOUT!">
 </form>
 

@@ -19,6 +19,5 @@ from shouts import views
 
 urlpatterns = [
     path('shouts/', include('shouts.urls')),
-    path('shouts/new_post/', views.new_post, name='new_post'),
     path('admin/', admin.site.urls),
 ]
