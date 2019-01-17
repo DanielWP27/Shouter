@@ -5,9 +5,6 @@ class Shout(models.Model):
     pub_date = models.DateTimeField('date shouted')
     likes = models.IntegerField(default=0)
 
-    class Meta:
-        db_table = '"shouts"'
-
 class User(models.Model):
     username = models.CharField(max_length=12)
     password = models.CharField(max_length=200)
@@ -15,5 +12,5 @@ class User(models.Model):
     followers = models.IntegerField(default=0)
     following = models.IntegerField(default=0)
 
-    class Meta:
-        db_table = '"users"'
+    def __str__(self):
+        return self.username
