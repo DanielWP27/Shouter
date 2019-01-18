@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Shout, User
+from django.utils.html import format_html
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -30,3 +31,5 @@ class ShoutAdmin(admin.ModelAdmin):
     list_display = ("id", "user", "likes", "pub_date")
     list_display_links = ("id", "user", "likes", "pub_date")
     search_fields = ("user__username",)
+
+    

@@ -8,7 +8,7 @@ import datetime
 from .models import Shout
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the shouts index.")
+    return redirect('feed')
 
 def new_post(request):
     return render(request, 'shouts/shout.html')
@@ -25,4 +25,4 @@ def feed(request):
     return render(request, "shouts/feed.html", context)
 
 def profile(request):
-    return HttpResponse("This is your profile!")
+    return HttpResponse(request.user.username)
