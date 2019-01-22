@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form action="{% url 'submit_post' %}" method ="post">
+        {% csrf_token %}
+        NEW SHOUT!:<br>
+        <textarea name="shout_input" rows="4" cols="50" placeholder="MAX 30 WORDS"></textarea><br>
+        <input type="submit" value = "SHOUT!">
+        </form>
+{% endblock %}

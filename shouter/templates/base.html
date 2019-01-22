@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Shouter!</title>
+        <meta charset="utf-8">
+        <meta name="description"content="SHOUT IT!">
+        <meta name="viewport"content="width=device.width, initial-scale=1">
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <div class="WELCOME">
+                    {% if request.user.is_authenticated %}
+                        <center><strong>{{ request.user.username|title}}</strong></center>
+                    {% else %}
+                        <center><strong>Welcome Guest!</strong></center>
+                    {% endif %}
+                </div>
+            </header>
+
+            <nav>
+                <center><a href="{% url 'feed' %}">Feed</a></center>
+                {% if user.is_authenticated %}
+                <center><a href="{% url 'new_post' %}">New Post</a></center>
+                <center><a href="{% url 'logout_user' %}">Logout</a></center>
+                {% else %}
+                <center><a href="{% url 'login_user' %}">Login</a></center>
+                {% endif %}
+            </nav>
+
+
+            <main>
+                {% block content %}{% endblock %}
+            </main>
+
+            <footer>
+
+            </footer>
+        </div>
+    </body>
+</html>
