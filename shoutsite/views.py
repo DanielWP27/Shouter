@@ -8,9 +8,12 @@ import datetime
 from .models import Shout
 
 def feed(request):
-    text = Shout.objects.all()
-    context = {'text': text}
-    return render(request, "shouts/feed.html", context)
+    if request.user.is_authenticated:
+        text = Shout.objects.all()
+        context = {'text': text}
+        return render(request, "shouts/feed.html", context)
+    else:
+        return redirect('login_user')
 
 @login_required
 def new_post(request):
@@ -27,21 +30,27 @@ def submit_post(request):
             return redirect('new_post')
 
 def login_user(request):
-    form = AuthenticationForm(request.POST)
-    context = {'form': form}
-    return render(request, 'login.html', context)  
-
-def login_redirect(request):
-    username = request.POST.get('username')
-    password = request.POST.get('password')
-    user = authenticate(username=username, password=password)
-    if user is not None:
-        login(request, user)
+    if request.user.is_authenticated:
         return redirect('feed')
     else:
-        return redirect('login_user')
+        form = AuthenticationForm(request.POST)
+        context = {'form': form}
+        return render(request, 'login.html', context)  
+
+def login_redirect(request):
+    if request.user.is_authenticated:
+        return redirect('feed')
+    else:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('feed')
+        else:
+            return redirect('login_user')
 
 @login_required  
 def logout_user(request):
     logout(request)
-    return redirect('feed')
+    return redirect('login_user')
