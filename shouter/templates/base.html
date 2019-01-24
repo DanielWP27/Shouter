@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-        <title>Shouter!</title>
+            <title>SHOUTER!</title>
         <meta charset="utf-8">
         <meta name="description"content="SHOUT IT!">
         <meta name="viewport"content="width=device.width, initial-scale=1">
@@ -11,20 +11,21 @@
             <header>
                 <div class="WELCOME">
                     {% if request.user.is_authenticated %}
-                        <center><strong>{{ request.user.username|title}}</strong></center>
+                        <center><strong>SHOUTER!</strong></center>
                     {% else %}
-                        <center><strong>Welcome Guest!</strong></center>
+                        <center><strong>WELCOME GUEST!</strong></center>
                     {% endif %}
                 </div>
             </header>
 
             <nav>
-                <center><a href="{% url 'feed' %}">Feed</a></center>
+                <center><a href="{% url 'feed' %}">FEED</a></center>
                 {% if user.is_authenticated %}
-                <center><a href="{% url 'new_post' %}">New Post</a></center>
-                <center><a href="{% url 'logout_user' %}">Logout</a></center>
+                <center><a href="{% url 'profile' %}">PROFILE</a></center>
+                <center><a href="{% url 'new_post' %}">NEW POST</a></center>
+                <center><a href="{% url 'logout_user' %}">LOGOUT</a></center>
                 {% else %}
-                <center><a href="{% url 'login_user' %}">Login</a></center>
+                <center><a href="{% url 'login_user' %}">LOGIN</a></center>
                 {% endif %}
             </nav>
 

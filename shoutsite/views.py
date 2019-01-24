@@ -54,3 +54,9 @@ def login_redirect(request):
 def logout_user(request):
     logout(request)
     return redirect('login_user')
+
+@login_required
+def profile(request):
+    text = Shout.objects.filter(user=request.user)
+    context = {'text': text}
+    return render(request, 'profile.html', context)

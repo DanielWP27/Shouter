@@ -1,24 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+    <center><strong>{{ request.user.username|upper }}'S FEED!</strong></center>
     <table cellspacing="10">
         <tr>
-            <th>Text</th>
-            <th>Date</th>
-            <th>Likes</th>
-            <th>Posted By</th>
-            <th>Date</th>
+            <th>TEXT</th>
+            <th>LIKES</th>
+            <th>POSTED BY</th>
+            <th>DATE</th>
         </tr>
         {% for item in text %}
         <tr> 
             <td style="text-align:center">{{ item.shout_text }}</td>
-            <td style="text-align:center">{{ item.pub_date }}</td>
             <td style="text-align:center">{{ item.likes }}</td>
-            <td style="text-align:center"> {% if item.user %}
-                        {{ item.user.get_full_name|default:item.user.username }}
-                    {% endif %}
-            </td>
-            <td style="text-align:center">{{ item.pub_date|date:"D d M Y H:i" }}</td>
+            <td style="text-align:center">{{ item.user.get_full_name|default:item.user.username|upper }}</td>
+            <td style="text-align:center">{{ item.pub_date|date:"D d M Y H:i"|upper }}</td>
         </tr>
         {% endfor %}
 {% endblock %}
