@@ -3,6 +3,19 @@
 {% block content %}
 
     <center><strong>{{ request.user.username|upper }}'S FEED!</strong></center>
+    
+    <form method="post" action="{% url 'feed' %}">
+        {% csrf_token %}
+        <strong>ORDER BY: </strong>
+        <select name="order_by">
+            <option value="latest">LATEST</option>
+            <option value="popular">MOST POPULAR</option>
+            <option value="latest_following">LATEST FOLLOWING</option>
+            <option value="popular_following">MOST POPULAR FOLLOWING</option>
+        </select>
+        <input type="submit" value=SUBMIT class="myButton">
+    </form>
+
     <table cellspacing="10">
         <tr>
             <th>TEXT</th>
@@ -14,7 +27,7 @@
         <tr> 
             <td style="text-align:center">{{ item.shout_text }}</td>
             <td style="text-align:center">{{ item.likes }}</td>
-            <td style="text-align:center">{{ item.user.get_full_name|default:item.user.username|upper }}</td>
+            <td style="text-align:center"> <a href="{% url 'profile' item.user.get_username %}">{{ item.user.get_full_name|default:item.user.username|upper|urlize }}</a></td>
             <td style="text-align:center">{{ item.pub_date|date:"D d M Y H:i"|upper }}</td>
         </tr>
         {% endfor %}

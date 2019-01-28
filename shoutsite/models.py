@@ -6,9 +6,9 @@ class Shout(models.Model):
     pub_date = models.DateTimeField('Date Shouted')
     likes = models.IntegerField(default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='shouts', verbose_name='Shouter')
-'''
+
 class Profile(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='shouts', verbose_name='Shouter')
+    owner = models.OneToOneField(User, on_delete=models.CASCADE, related_name='shouter', verbose_name='Shouter')
     total_likes = models.IntegerField(default=0)
     followers = models.IntegerField(default=0)
-'''
+    following = models.ManyToManyField(User)

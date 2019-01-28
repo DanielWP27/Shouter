@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <center><strong>{{ request.user.username|upper }}'S PROFILE!</strong></center>
+    <center><strong>{{ request.path|upper|slice:'9:' }}'S PROFILE!</strong></center>
+
+    {% ifnotequal request.path|slice:'9:' request.user.username %}
+        <center><strong><a href="{% url 'follow_user' request.path|slice:'9:' %}">FOLLOW</strong></a></center>
+    {% endifnotequal %}
 
     <table cellspacing="10">
             <tr>

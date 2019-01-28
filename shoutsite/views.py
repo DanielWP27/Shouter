@@ -1,19 +1,29 @@
+# pylint: disable=no-member
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 import datetime
 
-from .models import Shout
+from .models import User, Shout, Profile
 
 def feed(request):
-    if request.user.is_authenticated:
-        text = Shout.objects.all()
-        context = {'text': text}
-        return render(request, "shouts/feed.html", context)
+    if request.method == 'POST':
+        if request.POST.get('order_by') == 'popular':
+            text = Shout.objects.all().order_by('-likes', '-pub_date')
+        else:
+            text = Shout.objects.all().order_by('-pub_date')
+        '''elif request.POST.get('order_by') == 'latest_following':
+            my_profile = Profile.objects.get(owner=request.user)
+            text = Shout.objects.all().filter(user__in = my_profile.following).order_by('-pub_date', '-pub_date')
+        '''
+        
     else:
-        return redirect('login_user')
+        text = Shout.objects.all().order_by('-pub_date')
+    context = {'text': text}
+    return render(request, "shouts/feed.html", context)
 
 @login_required
 def new_post(request):
@@ -21,13 +31,15 @@ def new_post(request):
 
 @login_required
 def submit_post(request):
-    if request.method == 'POST':
+    if request.method == 'POST' and request.user.is_authenticated:
         if len(request.POST.get("shout_input","")) != 0:
             new_shout = Shout(shout_text=request.POST.get("shout_input",""),pub_date=datetime.datetime.now(),user=request.user)
             new_shout.save()
             return redirect('feed')
         else:
             return redirect('new_post')
+    else:
+        return redirect('new_post')
 
 def login_user(request):
     if request.user.is_authenticated:
@@ -56,7 +68,14 @@ def logout_user(request):
     return redirect('login_user')
 
 @login_required
-def profile(request):
-    text = Shout.objects.filter(user=request.user)
+def profile(request,username):
+    text = Shout.objects.filter(user__username=username)
     context = {'text': text}
     return render(request, 'profile.html', context)
+
+@login_required
+def follow_user(request, username):
+    my_profile = Profile.objects.get(owner=request.user)
+    user_to_follow = User.objects.get(username=username)
+    my_profile.following.add(user_to_follow)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

@@ -38,7 +38,7 @@ class UserTest(TestCase):
         self.user1.save()
 
     def tearDown(self):
-        self.user1.delete
+        self.user1.delete()
 
     def test_can_read_first_and_last_name(self):
         self.assertEqual('first', self.user1.first_name)

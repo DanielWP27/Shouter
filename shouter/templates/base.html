@@ -21,7 +21,7 @@
             <nav>
                 <center><a href="{% url 'feed' %}">FEED</a></center>
                 {% if user.is_authenticated %}
-                <center><a href="{% url 'profile' %}">PROFILE</a></center>
+                <center><a href="{% url 'profile' user.username %}">PROFILE</a></center>
                 <center><a href="{% url 'new_post' %}">NEW POST</a></center>
                 <center><a href="{% url 'logout_user' %}">LOGOUT</a></center>
                 {% else %}
