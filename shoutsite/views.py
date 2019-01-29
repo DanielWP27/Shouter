@@ -87,5 +87,6 @@ def follow_user(request, username):
     my_profile = Profile.objects.get(owner=request.user)
     user_to_follow = User.objects.get(username=username)
     my_profile.following.add(user_to_follow)
-    context = {'text': user_to_follow.username}
-    return redirect(request, 'profile.html', context)
+    text = Shout.objects.filter(user=user_to_follow)
+    context = {'text': text}
+    return render(request, 'profile.html', context)

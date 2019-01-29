@@ -28,5 +28,5 @@ urlpatterns = [
     path('login_red/', views.login_redirect, name='login_redirect'),
     path('logout/', views.logout_user, name='logout_user'),
     path('profile/<username>', views.profile, name='profile'),
-    path('profile/<username>/follow_user', views.follow_user, name='follow_user'),
+    path('profile/<username>', views.follow_user, name='follow_user'),
 ]
