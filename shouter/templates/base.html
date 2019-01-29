@@ -1,6 +1,9 @@
 <!doctype html>
 <html>
     <head>
+            <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet"/>
+            <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
             <title>SHOUTER!</title>
         <meta charset="utf-8">
         <meta name="description"content="SHOUT IT!">
@@ -18,7 +21,29 @@
                 </div>
             </header>
 
-            <nav>
+            <ul class="nav justify-content-center">
+                    <li class="nav-item">
+                      <a class="nav-link active" href="{% url 'feed' %}">FEED</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'profile' user.username %}">PROFILE</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'new_post' %}">NEW POST</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'logout_user' %}">LOGOUT</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'login_user' %}">LOGIN</a>
+                    </li>
+                    {% endif %}
+                  </ul>
+
+
+            <!----<nav>
                 <center><a href="{% url 'feed' %}">FEED</a></center>
                 {% if user.is_authenticated %}
                 <center><a href="{% url 'profile' user.username %}">PROFILE</a></center>
@@ -27,7 +52,7 @@
                 {% else %}
                 <center><a href="{% url 'login_user' %}">LOGIN</a></center>
                 {% endif %}
-            </nav>
+            </nav>-->
 
 
             <main>

@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+    {% if profile_found %}
     <center><strong>{{ request.path|upper|slice:'9:' }}'S PROFILE!</strong></center>
 
     {% ifnotequal request.path|slice:'9:' request.user.username %}
         <center><strong><a href="{% url 'follow_user' request.path|slice:'9:' %}">FOLLOW</strong></a></center>
     {% endifnotequal %}
 
-    <table cellspacing="10">
+    <table class="table" style="text-align:center">
             <tr>
                 <th>TEXT</th>
                 <th>LIKES</th>
@@ -15,9 +17,12 @@
             </tr>
             {% for item in text %}
             <tr> 
-                <td style="text-align:center">{{ item.shout_text }}</td>
-                <td style="text-align:center">{{ item.likes }}</td>
-                <td style="text-align:center">{{ item.pub_date|date:"D d M Y H:i"|upper }}</td>
+                <td>{{ item.shout_text }}</td>
+                <td>{{ item.likes }}</td>
+                <td>{{ item.pub_date|date:"D d M Y H:i"|upper }}</td>
             </tr>
             {% endfor %}
+    {% else %}
+        <center><strong>PROFILE NOT FOUND</strong></center>
+    {% endif %}
 {% endblock %}

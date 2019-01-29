@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
+from django.urls import NoReverseMatch
 import datetime
 
 from .models import User, Shout, Profile
@@ -13,13 +14,14 @@ def feed(request):
     if request.method == 'POST':
         if request.POST.get('order_by') == 'popular':
             text = Shout.objects.all().order_by('-likes', '-pub_date')
-        else:
-            text = Shout.objects.all().order_by('-pub_date')
-        '''elif request.POST.get('order_by') == 'latest_following':
+        elif request.POST.get('order_by') == 'latest_following':
             my_profile = Profile.objects.get(owner=request.user)
-            text = Shout.objects.all().filter(user__in = my_profile.following).order_by('-pub_date', '-pub_date')
-        '''
-        
+            text = Shout.objects.filter(user__in = my_profile.following.all()).order_by('-pub_date')
+        elif request.POST.get('order_by') == 'popular_following':
+            my_profile = Profile.objects.get(owner=request.user)
+            text = Shout.objects.filter(user__in = my_profile.following.all()).order_by('-likes', '-pub_date')
+        else:
+            text = Shout.objects.all().order_by('-pub_date')  
     else:
         text = Shout.objects.all().order_by('-pub_date')
     context = {'text': text}
@@ -68,9 +70,16 @@ def logout_user(request):
     return redirect('login_user')
 
 @login_required
-def profile(request,username):
+def profile(request, username):
     text = Shout.objects.filter(user__username=username)
-    context = {'text': text}
+    try:
+        profile_owner = User.objects.get(username=username)
+        profile_found = True
+    except User.DoesNotExist:
+        profile_owner = None
+        profile_found = False
+
+    context = {'text': text, 'profile_found': profile_found}
     return render(request, 'profile.html', context)
 
 @login_required
@@ -78,4 +87,5 @@ def follow_user(request, username):
     my_profile = Profile.objects.get(owner=request.user)
     user_to_follow = User.objects.get(username=username)
     my_profile.following.add(user_to_follow)
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    context = {'text': user_to_follow.username}
+    return redirect(request, 'profile.html', context)

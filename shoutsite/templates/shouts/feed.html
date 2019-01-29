@@ -16,7 +16,7 @@
         <input type="submit" value=SUBMIT class="myButton">
     </form>
 
-    <table cellspacing="10">
+    <table class="table" style="text-align:center">
         <tr>
             <th>TEXT</th>
             <th>LIKES</th>
@@ -25,10 +25,10 @@
         </tr>
         {% for item in text %}
         <tr> 
-            <td style="text-align:center">{{ item.shout_text }}</td>
-            <td style="text-align:center">{{ item.likes }}</td>
-            <td style="text-align:center"> <a href="{% url 'profile' item.user.get_username %}">{{ item.user.get_full_name|default:item.user.username|upper|urlize }}</a></td>
-            <td style="text-align:center">{{ item.pub_date|date:"D d M Y H:i"|upper }}</td>
+            <td>{{ item.shout_text }}</td>
+            <td>{{ item.likes }}</td>
+            <td> <a href="{% url 'profile' item.user.get_username %}">{{ item.user.get_full_name|default:item.user.username|upper|urlize }}</a></td>
+            <td>{{ item.pub_date|date:"D d M Y H:i"|upper }}</td>
         </tr>
         {% endfor %}
 {% endblock %}
