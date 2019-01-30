@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.urls import NoReverseMatch
 import datetime
 
@@ -69,24 +69,54 @@ def logout_user(request):
     logout(request)
     return redirect('login_user')
 
-@login_required
 def profile(request, username):
-    text = Shout.objects.filter(user__username=username)
-    try:
-        profile_owner = User.objects.get(username=username)
-        profile_found = True
-    except User.DoesNotExist:
-        profile_owner = None
-        profile_found = False
+    if request.user.is_authenticated:
+        text = Shout.objects.filter(user__username=username)
+        try:
+            profile_owner = User.objects.get(username=username)
+            profile_found = True
+            user_profile = Profile.objects.get(owner=request.user)
+            this_profile = Profile.objects.get(owner=profile_owner)
+            profile_set = Profile.objects.all().filter(following__username = request.user.username)
+            if user_profile.following.filter(username = profile_owner.username):
+                already_following = True
+            else:
+                already_following = False
+        except User.DoesNotExist:
+            profile_owner = None
+            profile_found = False
+            already_following = False
 
-    context = {'text': text, 'profile_found': profile_found}
-    return render(request, 'profile.html', context)
+        context = {'text': text, 'this_profile': this_profile, 'profile_set': profile_set, 'username': username, 'profile_found': profile_found, 'already_following': already_following}
+        return render(request, 'profile.html', context)
+    else:
+        return redirect('feed')
 
 @login_required
 def follow_user(request, username):
     my_profile = Profile.objects.get(owner=request.user)
     user_to_follow = User.objects.get(username=username)
     my_profile.following.add(user_to_follow)
-    text = Shout.objects.filter(user=user_to_follow)
-    context = {'text': text}
-    return render(request, 'profile.html', context)
+    text = user_to_follow.username
+    following_profile = Profile.objects.get(owner=user_to_follow)
+    following_profile.followers += 1
+    following_profile.save()
+    return redirect('profile', text)
+
+def signup_user(request):
+    if request.user.is_authenticated:
+        return redirect('login_user')
+    else:
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            profile = Profile(owner=user)
+            profile.save()
+            login(request, user)
+            return redirect('feed')
+        else:
+            form = UserCreationForm()
+    return render(request, 'signup.html', {'form': form})

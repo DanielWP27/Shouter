@@ -1,6 +1,6 @@
-<!DOCTYPE html>
-<html>
-<body>
+{% extends "base.html" %}
+
+{% block content %}
 <h2>Login</h2>
 <form method="post" action="{% url 'login_redirect' %}">
   {% csrf_token %}
@@ -8,5 +8,4 @@
   <input type="hidden" name="next" value="{% url 'feed' %}" />
   <button type="submit">Login</button>
 </form>
-</body>
-</html>
+{% endblock %}

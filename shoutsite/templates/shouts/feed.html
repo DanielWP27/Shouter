@@ -2,7 +2,12 @@
 
 {% block content %}
 
+    {% if user.is_authenticated %}
     <center><strong>{{ request.user.username|upper }}'S FEED!</strong></center>
+    {% else %}
+    <center><strong>WELCOME GUEST!</strong></center>
+    <center><strong>LOGIN OR SIGNUP TO CREATE NEW POSTS, CHECK OUT PROFILES, FOLLOW USERS AND LIKE POSTS!</strong></center>
+    {% endif %}
     
     <form method="post" action="{% url 'feed' %}">
         {% csrf_token %}
@@ -16,7 +21,7 @@
         <input type="submit" value=SUBMIT class="myButton">
     </form>
 
-    <table class="table" style="text-align:center">
+    <table class="table" style="text-align:center; white-space:pre-wrap; word-wrap:break-word">
         <tr>
             <th>TEXT</th>
             <th>LIKES</th>
@@ -25,9 +30,9 @@
         </tr>
         {% for item in text %}
         <tr> 
-            <td>{{ item.shout_text }}</td>
+            <td style="max-width: 300px;">{{ item.shout_text }}</td>
             <td>{{ item.likes }}</td>
-            <td> <a href="{% url 'profile' item.user.get_username %}">{{ item.user.get_full_name|default:item.user.username|upper|urlize }}</a></td>
+            <td style="white-space:nowrap;"> <a href="{% url 'profile' item.user.get_username %}">{{ item.user.get_full_name|default:item.user.username|upper|urlize }}</a></td>
             <td>{{ item.pub_date|date:"D d M Y H:i"|upper }}</td>
         </tr>
         {% endfor %}

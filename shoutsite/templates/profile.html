@@ -3,13 +3,15 @@
 {% block content %}
 
     {% if profile_found %}
-    <center><strong>{{ request.path|upper|slice:'9:' }}'S PROFILE!</strong></center>
+    <center><strong>{{ username|upper }}'S PROFILE!</strong></center>
 
     {% ifnotequal request.path|slice:'9:' request.user.username %}
+        {% ifnotequal already_following True %}
         <center><strong><a href="{% url 'follow_user' request.path|slice:'9:' %}">FOLLOW</strong></a></center>
+        {% endifnotequal %}
     {% endifnotequal %}
 
-    <table class="table" style="text-align:center">
+    <table class="table" style="text-align:center; white-space:pre-wrap; word-wrap:break-word">
             <tr>
                 <th>TEXT</th>
                 <th>LIKES</th>
@@ -17,11 +19,25 @@
             </tr>
             {% for item in text %}
             <tr> 
-                <td>{{ item.shout_text }}</td>
+                <td style="max-width: 300px;">{{ item.shout_text }}</td>
                 <td>{{ item.likes }}</td>
                 <td>{{ item.pub_date|date:"D d M Y H:i"|upper }}</td>
             </tr>
             {% endfor %}
+  
+    <strong align="left">FOLLOWING</strong>
+
+    {% for x in this_profile.following.all %}
+            <p align="left">{{ x.username|upper }}</p>
+    
+    {% endfor %}
+
+    <strong align="left">FOLLOWERS</strong>
+
+    {% for x in profile_set %}
+            <p align="left">{{ x.owner.username|upper }}</p>
+    {% endfor %}
+
     {% else %}
         <center><strong>PROFILE NOT FOUND</strong></center>
     {% endif %}
