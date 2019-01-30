@@ -4,11 +4,22 @@
 
     {% if user.is_authenticated %}
     <center><strong>{{ request.user.username|upper }}'S FEED!</strong></center>
+
+    <div class="col">
+    <form action="{% url 'submit_post' %}" method ="post">
+            {% csrf_token %}
+            NEW SHOUT!:<br>
+            <textarea name="shout_input" rows="8" cols="50" style="text-transform:uppercase;resize:none" maxlength="250" placeholder="MAX 30 WORDS"></textarea><br>
+            <input type="submit" value = "SHOUT!">
+            </form>
+    </div>
+
     {% else %}
     <center><strong>WELCOME GUEST!</strong></center>
     <center><strong>LOGIN OR SIGNUP TO CREATE NEW POSTS, CHECK OUT PROFILES, FOLLOW USERS AND LIKE POSTS!</strong></center>
     {% endif %}
     
+    <div class="col-sm-9 offset-sm-9">
     <form method="post" action="{% url 'feed' %}">
         {% csrf_token %}
         <strong>ORDER BY: </strong>
@@ -20,6 +31,7 @@
         </select>
         <input type="submit" value=SUBMIT class="myButton">
     </form>
+    </div>
 
     <table class="table" style="text-align:center; white-space:pre-wrap; word-wrap:break-word">
         <tr>
@@ -30,10 +42,11 @@
         </tr>
         {% for item in text %}
         <tr> 
-            <td style="max-width: 300px;">{{ item.shout_text }}</td>
+            <td style="max-width: 300px;">{{ item.shout_text|upper }}</td>
             <td>{{ item.likes }}</td>
             <td style="white-space:nowrap;"> <a href="{% url 'profile' item.user.get_username %}">{{ item.user.get_full_name|default:item.user.username|upper|urlize }}</a></td>
             <td>{{ item.pub_date|date:"D d M Y H:i"|upper }}</td>
         </tr>
         {% endfor %}
+    </table>
 {% endblock %}

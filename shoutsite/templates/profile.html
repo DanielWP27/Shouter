@@ -11,32 +11,41 @@
         {% endifnotequal %}
     {% endifnotequal %}
 
-    <table class="table" style="text-align:center; white-space:pre-wrap; word-wrap:break-word">
-            <tr>
-                <th>TEXT</th>
-                <th>LIKES</th>
-                <th>DATE</th>
-            </tr>
-            {% for item in text %}
-            <tr> 
-                <td style="max-width: 300px;">{{ item.shout_text }}</td>
-                <td>{{ item.likes }}</td>
-                <td>{{ item.pub_date|date:"D d M Y H:i"|upper }}</td>
-            </tr>
-            {% endfor %}
+            <div class="row">
+              <div class="col-sm-4">
+                    <strong align="left">FOLLOWING: {{ this_profile.following.count }}</strong>
+
+                    {% for x in this_profile.following.all %}
+                            <p align="left"><a href="{% url 'profile' x.username %}">{{ x.username|upper }}</a></p>
+                    
+                    {% endfor %}
+                
+                    <strong align="left">FOLLOWERS: {{ this_profile.followers }}</strong>
+                
+                    {% for x in profile_set %}
+                            <p align="left"><p align="left"><a href="{% url 'profile' x.owner.username %}">{{ x.owner.username|upper }}</a></p>
+                    {% endfor %}
+              </div>
+              <div class="col-sm-4">
+                    <table class="table" style="text-align:center; white-space:pre-wrap; word-wrap:break-word">
+                            <tr>
+                                <th>TEXT</th>
+                                <th>LIKES</th>
+                                <th>DATE</th>
+                            </tr>
+                            {% for item in text %}
+                            <tr> 
+                                <td style="max-width: 300px;">{{ item.shout_text|upper }}</td>
+                                <td>{{ item.likes }}</td>
+                                <td>{{ item.pub_date|date:"D d M Y H:i"|upper }}</td>
+                            </tr>
+                            {% endfor %}
+                    </table>
+              </div>
+            </div>
+   
   
-    <strong align="left">FOLLOWING</strong>
-
-    {% for x in this_profile.following.all %}
-            <p align="left">{{ x.username|upper }}</p>
     
-    {% endfor %}
-
-    <strong align="left">FOLLOWERS</strong>
-
-    {% for x in profile_set %}
-            <p align="left">{{ x.owner.username|upper }}</p>
-    {% endfor %}
 
     {% else %}
         <center><strong>PROFILE NOT FOUND</strong></center>
