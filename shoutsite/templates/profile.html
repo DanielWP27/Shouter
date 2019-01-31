@@ -12,8 +12,8 @@
     {% endifnotequal %}
 
             <div class="row">
-              <div class="col-sm-4">
-                    <strong align="left">FOLLOWING: {{ this_profile.following.count }}</strong>
+              <div class="col-sm-3">
+                    <br><strong align="left">FOLLOWING: {{ this_profile.following.count }}</strong></br>
 
                     {% for x in this_profile.following.all %}
                             <p align="left"><a href="{% url 'profile' x.username %}">{{ x.username|upper }}</a></p>
@@ -23,10 +23,10 @@
                     <strong align="left">FOLLOWERS: {{ this_profile.followers }}</strong>
                 
                     {% for x in profile_set %}
-                            <p align="left"><p align="left"><a href="{% url 'profile' x.owner.username %}">{{ x.owner.username|upper }}</a></p>
+                            <p align="left"><a href="{% url 'profile' x.owner.username %}">{{ x.owner.username|upper }}</a></p>
                     {% endfor %}
               </div>
-              <div class="col-sm-4">
+              <div class="col-sm-6">
                     <table class="table" style="text-align:center; white-space:pre-wrap; word-wrap:break-word">
                             <tr>
                                 <th>TEXT</th>

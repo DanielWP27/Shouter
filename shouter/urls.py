@@ -22,7 +22,6 @@ from shoutsite import views
 urlpatterns = [
     path('', views.feed, name='feed'),
     path('admin/', admin.site.urls),
-    path('new_post/', views.new_post, name='new_post'),
     path('submit_post/', views.submit_post, name='submit_post'),
     path('login/', views.login_user, name='login_user'),
     path('login_red/', views.login_redirect, name='login_redirect'),

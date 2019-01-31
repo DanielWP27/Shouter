@@ -27,9 +27,6 @@ def feed(request):
     context = {'text': text}
     return render(request, "shouts/feed.html", context)
 
-@login_required
-def new_post(request):
-    return render(request, 'shouts/shout.html')
 
 @login_required
 def submit_post(request):
@@ -77,7 +74,7 @@ def profile(request, username):
             profile_found = True
             user_profile = Profile.objects.get(owner=request.user)
             this_profile = Profile.objects.get(owner=profile_owner)
-            profile_set = Profile.objects.all().filter(following__username = request.user.username)
+            profile_set = Profile.objects.all().filter(following__username = profile_owner.username)
             if user_profile.following.filter(username = profile_owner.username):
                 already_following = True
             else:

@@ -26,9 +26,6 @@
                       <a class="nav-link" href="{% url 'profile' user.username %}">PROFILE</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="{% url 'new_post' %}">NEW POST</a>
-                    </li>
-                    <li class="nav-item">
                       <a class="nav-link" href="{% url 'logout_user' %}">LOGOUT</a>
                     </li>
                     {% else %}
@@ -46,7 +43,6 @@
                 <center><a href="{% url 'feed' %}">FEED</a></center>
                 {% if user.is_authenticated %}
                 <center><a href="{% url 'profile' user.username %}">PROFILE</a></center>
-                <center><a href="{% url 'new_post' %}">NEW POST</a></center>
                 <center><a href="{% url 'logout_user' %}">LOGOUT</a></center>
                 {% else %}
                 <center><a href="{% url 'login_user' %}">LOGIN</a></center>
