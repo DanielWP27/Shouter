@@ -27,16 +27,16 @@ class TestProfile(TestCase):
 
     #Tests that the profile url is correct
     def test_profile_url(self):
-        url = resolve('/profile/')
+        url = resolve('/profile/test')
         self.assertEqual(url.func, views.profile)
 
     #Tests that you have to be logged in to view this page
     def test_authentication_control(self):
-        response = self.client.get(reverse('profile'))
+        response = self.client.get(reverse('profile', kwargs={'username': 'first'}))
         self.assertEqual(response.status_code, 302)
 
         self.client.login(username='test', password='test')
-        response = self.client.get(reverse('profile'))
+        response = self.client.get(reverse('profile', kwargs={'username': 'first'}))
         self.assertEqual(response.status_code, 200)
         
     
@@ -75,13 +75,6 @@ class TestLoginRedirect(TestCase):
         self.client.login(username='test', password='test')
         response = self.client.get(reverse('login_redirect'))
         self.assertRedirects(response, '/', status_code=302, target_status_code=200, fetch_redirect_response=True)
-
-class TestNewPost(TestCase):
-
-    #Tests that the new_post url is correct
-    def test_new_post_url(self):
-        url = resolve('/new_post/')
-        self.assertEqual(url.func, views.new_post)
 
 class TestSubmitPost(TestCase):
     def setUp(self):

@@ -36,9 +36,9 @@ def submit_post(request):
             new_shout.save()
             return redirect('feed')
         else:
-            return redirect('new_post')
+            return redirect('feed')
     else:
-        return redirect('new_post')
+        return redirect('feed')
 
 def login_user(request):
     if request.user.is_authenticated:
@@ -79,13 +79,14 @@ def profile(request, username):
                 already_following = True
             else:
                 already_following = False
+
+            context = {'text': text, 'this_profile': this_profile, 'profile_set': profile_set, 'username': username, 'profile_found': profile_found, 'already_following': already_following}
+            return render(request, 'profile.html', context)
         except User.DoesNotExist:
             profile_owner = None
             profile_found = False
             already_following = False
-
-        context = {'text': text, 'this_profile': this_profile, 'profile_set': profile_set, 'username': username, 'profile_found': profile_found, 'already_following': already_following}
-        return render(request, 'profile.html', context)
+            return render(request, 'profile.html')
     else:
         return redirect('feed')
 

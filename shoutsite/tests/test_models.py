@@ -2,7 +2,7 @@
 
 from django.test import TestCase
 from shoutsite.models import Shout
-from shoutsite.factories import ShoutFactory, UserFactory
+from shoutsite.factories import ShoutFactory, UserFactory, ProfileFactory
 
 class ShoutTest(TestCase):
     def setUp(self):
@@ -49,3 +49,17 @@ class UserTest(TestCase):
 
     def test_can_confirm_password_hashed(self):
         self.assertNotEqual('test', self.user1.password)
+
+class ProfileTest(TestCase):
+    def setUp(self):
+        self.profile1 = ProfileFactory()
+        self.profile1.save()
+
+    def tearDown(self):
+        self.profile1.delete()
+
+    def test_can_read_owner(self):
+        self.assertEqual('first', self.profile1.owner.first_name)
+        self.assertEqual('last', self.profile1.owner.last_name)
+
+    

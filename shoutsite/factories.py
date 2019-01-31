@@ -1,6 +1,6 @@
 import factory
 import factory.fuzzy 
-from .models import Shout
+from .models import Shout, Profile
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 import datetime
@@ -40,3 +40,13 @@ class ShoutFactory(factory.django.DjangoModelFactory):
     pub_date = '2019-01-22 10:06:09.268029'
     likes = 0
     user = factory.SubFactory(UserFactory)
+
+class ProfileFactory(factory.django.DjangoModelFactory):
+    '''
+    Creates a profile
+    '''
+
+    class Meta:
+        model = Profile
+
+    owner = factory.SubFactory(UserFactory)
